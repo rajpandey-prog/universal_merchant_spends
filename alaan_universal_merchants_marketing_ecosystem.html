@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alaan Universal Merchant Unlock - Marketing Spend Ecosystem</title>
+<style>
+:root{
+  --purple:#3D1FAB;
+  --purple2:#6B4FE0;
+  --purple3:#EEE9FF;
+  --purple4:#C8B8F8;
+  --ink:#111827;
+  --ink2:#374151;
+  --ink3:#6B7280;
+  --muted:#F7F7FB;
+  --line:#E7E5F2;
+  --green:#067647;
+  --green-bg:#ECFDF3;
+  --amber:#B54708;
+  --amber-bg:#FFFAEB;
+  --blue:#175CD3;
+  --blue-bg:#EFF4FF;
+  --red:#B42318;
+  --red-bg:#FEF3F2;
+  --white:#fff;
+  --shadow:0 18px 40px rgba(29, 20, 68, .10);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;background:#F4F2FA;color:var(--ink);font-size:14px;line-height:1.45}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;background:none}
+.app{min-height:100vh;display:grid;grid-template-columns:248px 1fr}
+.sidebar{background:#120A32;color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 8px}
+.logo{width:34px;height:34px;border-radius:11px;background:#fff;color:var(--purple);display:grid;place-items:center;font-weight:900;letter-spacing:-.03em}
+.brand-text{font-weight:800;font-size:18px;letter-spacing:-.03em}
+.side-section{display:flex;flex-direction:column;gap:6px}
+.side-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.38);padding:0 10px 4px}
+.side-item{display:flex;gap:10px;align-items:center;color:rgba(255,255,255,.72);padding:10px 10px;border-radius:12px;font-weight:600;font-size:13px}
+.side-item.active{background:rgba(255,255,255,.12);color:#fff}
+.side-item .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}
+.side-item.active .dot{background:#C5B7FF}
+.sidebar-card{margin-top:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px}
+.sidebar-card .t{font-weight:800;margin-bottom:4px}
+.sidebar-card .p{font-size:12px;color:rgba(255,255,255,.62)}
+.main{min-width:0}
+.topbar{height:68px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.top-title{font-weight:850;font-size:18px;letter-spacing:-.03em}
+.top-sub{font-size:12px;color:var(--ink3);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.demo-select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px;color:var(--ink2);font-weight:700;outline:none}
+.reset{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-weight:800;color:var(--ink2)}
+.page{padding:28px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;max-width:1440px;margin:0 auto}
+.stack{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.panel-pad{padding:20px}
+.hero{background:linear-gradient(135deg,#fff 0%,#F7F3FF 48%,#ECE8FF 100%);border:1px solid var(--purple4)}
+.hero-main{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;align-items:center;padding:22px}
+.kicker{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--purple4);color:var(--purple);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:850;margin-bottom:12px}
+.spark{width:8px;height:8px;border-radius:50%;background:var(--purple)}
+h1{font-size:34px;line-height:1.04;letter-spacing:-.055em;margin-bottom:10px;max-width:760px}
+.lede{font-size:15px;color:var(--ink2);max-width:720px;line-height:1.7}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:11px 14px;font-weight:850;border:1px solid transparent;transition:.12s ease;text-decoration:none}
+.btn.primary{background:var(--purple);color:#fff}
+.btn.primary:hover{background:#2e168a}
+.btn.secondary{background:#fff;color:var(--purple);border-color:var(--purple4)}
+.btn.ghost{background:#fff;color:var(--ink2);border-color:var(--line)}
+.btn.green{background:var(--green);color:#fff}
+.btn.full{width:100%}
+.hero-metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.metric-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);font-weight:850;margin-bottom:8px}
+.metric-value{font-size:32px;font-weight:900;letter-spacing:-.05em;color:var(--purple);line-height:1}
+.metric-desc{font-size:12px;color:var(--ink3);line-height:1.55;margin-top:8px}
+.trust-row{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--purple4)}
+.trust{padding:14px 20px;border-right:1px solid var(--purple4)}
+.trust:last-child{border-right:0}
+.trust b{display:block;font-size:13px;margin-bottom:3px}
+.trust span{font-size:12px;color:var(--ink3)}
+.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.section-title h2{font-size:18px;letter-spacing:-.03em;margin-bottom:3px}
+.section-title p{color:var(--ink3);font-size:13px;line-height:1.55}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:850;white-space:nowrap}
+.badge.purple{background:var(--purple3);color:var(--purple)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.badge.gray{background:#F2F4F7;color:#475467}
+.mission-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+.mission{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:12px;min-height:230px;position:relative;overflow:hidden}
+.mission.recommended{border-color:var(--purple4);box-shadow:0 12px 30px rgba(61,31,171,.11)}
+.mission.disabled{opacity:.64;background:#FBFAFD}
+.mission .icon{width:42px;height:42px;border-radius:14px;background:var(--purple3);display:grid;place-items:center;font-size:20px}
+.mission h3{font-size:16px;letter-spacing:-.03em}
+.mission p{font-size:12.5px;color:var(--ink3);line-height:1.55}
+.mission ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:auto}
+.mission li{display:flex;gap:7px;color:var(--ink2);font-size:12px;align-items:flex-start}
+.check{width:16px;height:16px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center;font-size:11px;flex:0 0 auto;margin-top:1px;font-weight:900}
+.mission .btn{margin-top:2px;padding:10px 12px;font-size:13px}
+.ecosystem{padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.eco-step{border:1px solid var(--line);border-radius:16px;padding:15px;display:flex;gap:12px;align-items:flex-start;background:#fff}
+.eco-step.done{background:var(--green-bg);border-color:#A6F4C5}
+.eco-step.active{background:var(--purple3);border-color:var(--purple4)}
+.eco-num{width:28px;height:28px;border-radius:10px;background:#fff;color:var(--purple);display:grid;place-items:center;font-weight:900;border:1px solid var(--purple4);flex:0 0 auto}
+.eco-step.done .eco-num{background:var(--green);color:#fff;border-color:var(--green)}
+.eco-step h4{font-size:13px;margin-bottom:3px}
+.eco-step p{font-size:12px;color:var(--ink3);line-height:1.5}
+.card-row{display:grid;grid-template-columns:1.08fr .92fr;gap:16px;padding:18px 20px}
+.review-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+.field input,.field select{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;outline:none;color:var(--ink);font-weight:700}
+.field input:focus,.field select:focus{border-color:var(--purple4);box-shadow:0 0 0 4px var(--purple3)}
+.safe-box{background:var(--blue-bg);border:1px solid #B2CCFF;border-radius:14px;padding:13px;color:#1D2939;font-size:12.5px;line-height:1.55;margin-bottom:12px}
+.safe-box b{color:var(--blue)}
+.mock-card{background:linear-gradient(135deg,#13092E,#3D1FAB 70%,#6B4FE0);min-height:220px;border-radius:22px;color:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 20px 45px rgba(61,31,171,.32);position:relative;overflow:hidden}
+.mock-card:before{content:"";position:absolute;right:-70px;top:-70px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.12)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.card-chip{width:42px;height:30px;background:linear-gradient(135deg,#FFE08A,#D79E18);border-radius:8px;opacity:.9}
+.card-name{font-size:12px;color:rgba(255,255,255,.68);font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.card-number{font-size:20px;letter-spacing:.08em;font-weight:850;position:relative;z-index:1}
+.card-bottom{display:flex;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.card-small{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.card-big{font-size:13px;font-weight:800}
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 20px}
+.tab{padding:14px 14px;border-bottom:2px solid transparent;font-weight:850;color:var(--ink3)}
+.tab.active{color:var(--purple);border-color:var(--purple)}
+.guide{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;padding:18px 20px}
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;gap:12px;background:#fff}
+.step.active{background:var(--purple3);border-color:var(--purple4)}
+.step.done{background:var(--green-bg);border-color:#A6F4C5}
+.step-num{width:26px;height:26px;border-radius:9px;background:#F2F4F7;color:var(--ink3);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.step.active .step-num{background:var(--purple);color:#fff}
+.step.done .step-num{background:var(--green);color:#fff}
+.step h4{font-size:13px;margin-bottom:3px}
+.step p{font-size:12px;color:var(--ink3);line-height:1.5}
+.copy-panel{border:1px solid var(--line);border-radius:16px;padding:14px;background:#FBFAFF;height:max-content;position:sticky;top:88px}
+.copy-panel h4{font-size:14px;margin-bottom:4px}
+.copy-panel p{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:12px}
+.copy-item{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;margin-bottom:8px}
+.copy-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:850;margin-bottom:4px}
+.copy-val{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:850;font-size:13px;word-break:break-all}
+.copy-val button{font-size:11px;background:var(--purple3);color:var(--purple);border-radius:8px;padding:5px 7px;font-weight:900;white-space:nowrap}
+.checklist{position:sticky;top:88px;display:flex;flex-direction:column;gap:14px}
+.progress-card{padding:18px}
+.progress-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+.progress-head h3{font-size:17px;letter-spacing:-.03em}
+.progress-head p{font-size:12px;color:var(--ink3);line-height:1.45;margin-top:3px}
+.progress-ring{width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--purple) calc(var(--pct)*1%),#ECEAF4 0);display:grid;place-items:center;flex:0 0 auto}
+.progress-ring span{width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:12px;font-weight:900;color:var(--purple)}
+.progress-line{height:8px;background:#ECEAF4;border-radius:99px;overflow:hidden;margin-bottom:14px}
+.progress-fill{height:100%;background:var(--purple);width:var(--progress);transition:.2s}
+.check-items{display:flex;flex-direction:column;gap:9px}
+.check-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:13px;padding:11px;background:#fff}
+.check-item.done{background:var(--green-bg);border-color:#A6F4C5}
+.check-item.active{background:var(--purple3);border-color:var(--purple4)}
+.status-icon{width:22px;height:22px;border-radius:50%;background:#F2F4F7;color:var(--ink3);display:grid;place-items:center;font-weight:900;flex:0 0 auto;font-size:12px}
+.check-item.done .status-icon{background:var(--green);color:#fff}
+.check-item.active .status-icon{background:var(--purple);color:#fff}
+.ci-title{font-size:13px;font-weight:850;margin-bottom:2px}
+.ci-desc{font-size:11.5px;color:var(--ink3);line-height:1.35}
+.cashback-card{padding:16px;background:linear-gradient(135deg,#ECFDF3,#fff);border-color:#A6F4C5}
+.cashback-card .big{font-size:28px;font-weight:950;color:var(--green);letter-spacing:-.04em;margin:5px 0 2px}
+.cashback-card p{font-size:12px;color:var(--ink3);line-height:1.5}
+.notification{display:none;align-items:flex-start;gap:10px;border:1px solid #A6F4C5;background:var(--green-bg);padding:14px;border-radius:14px;margin-top:14px}
+.notification.show{display:flex}
+.not-icon{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.modal-backdrop{position:fixed;inset:0;background:rgba(17,24,39,.44);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.modal{background:#fff;border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.24);max-width:560px;width:100%;overflow:hidden}
+.modal-hd{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.modal-hd h3{font-size:20px;letter-spacing:-.04em;margin-bottom:4px}
+.modal-hd p{font-size:13px;color:var(--ink3);line-height:1.5}
+.close{width:32px;height:32px;border-radius:10px;background:#F2F4F7;color:var(--ink2);font-weight:900}
+.modal-bd{padding:20px}
+.share-box{background:#F8F7FF;border:1px solid var(--line);border-radius:16px;padding:14px;color:var(--ink2);font-size:13px;line-height:1.55;margin:12px 0}
+.toast{position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;border-radius:14px;padding:12px 14px;font-weight:800;box-shadow:0 18px 50px rgba(0,0,0,.25);display:none;z-index:100;max-width:360px}
+.toast.show{display:block;animation:pop .2s ease}
+@keyframes pop{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.hidden{display:none!important}
+@media(max-width:1180px){.page{grid-template-columns:1fr}.checklist{position:static}.hero-main,.card-row,.guide{grid-template-columns:1fr}.mission-grid{grid-template-columns:1fr}.ecosystem{grid-template-columns:1fr}.trust-row{grid-template-columns:1fr}.trust{border-right:0;border-bottom:1px solid var(--purple4)}.trust:last-child{border-bottom:0}.copy-panel{position:static}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.topbar{height:auto;align-items:flex-start;gap:12px;flex-direction:column;padding:16px}.page{padding:16px}.top-actions{width:100%;flex-direction:column;align-items:stretch}.demo-select,.reset{width:100%}h1{font-size:28px}.review-form{grid-template-columns:1fr}.hero-ctas .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">A</div><div class="brand-text">Alaan</div></div>
+    <div class="side-section">
+      <div class="side-label">Workspace</div>
+      <div class="side-item active"><span class="dot"></span>Home</div>
+      <div class="side-item"><span class="dot"></span>Cards</div>
+      <div class="side-item"><span class="dot"></span>Expenses</div>
+      <div class="side-item"><span class="dot"></span>Transactions</div>
+      <div class="side-item"><span class="dot"></span>Cashback</div>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Spend ecosystem</div>
+      <div class="side-item active"><span class="dot"></span>Spend checklist</div>
+      <div class="side-item"><span class="dot"></span>Merchant unlocks</div>
+      <div class="side-item"><span class="dot"></span>Recurring spend</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="t">Universal merchant unlocks</div>
+      <div class="p">Relevant corporates get guided setup for high-value merchants they already use outside Alaan.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="top-title">Home</div>
+        <div class="top-sub">Customer-facing prototype: usecase-led merchant ecosystem</div>
+      </div>
+      <div class="top-actions">
+        <select class="demo-select" id="accountSelect" aria-label="Prototype account">
+          <option value="realEstate">Preview account: Real estate broker</option>
+          <option value="restaurant">Preview account: Restaurant group</option>
+          <option value="ecom">Preview account: Retail / e-commerce</option>
+          <option value="services">Preview account: Corporate services</option>
+        </select>
+        <button class="reset" id="resetBtn">Reset prototype</button>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="stack">
+        <section class="panel hero" id="heroPanel">
+          <div class="hero-main">
+            <div>
+              <div class="kicker"><span class="spark"></span><span id="heroKicker">Recommended merchant unlock</span></div>
+              <h1 id="heroTitle">Move your Meta and Google ad spend to Alaan.</h1>
+              <p class="lede" id="heroLede">Companies like yours use Alaan for recurring marketing spend so they can earn cashback, keep ad payments visible to finance, and avoid campaign interruptions from personal or unmanaged cards.</p>
+              <div class="hero-ctas">
+                <button class="btn primary" data-scroll="ecosystemPanel">Open checklist</button>
+                <button class="btn secondary" data-scroll="missionsPanel">See merchant unlocks</button>
+              </div>
+            </div>
+            <div class="hero-metric">
+              <div class="metric-label">Estimated cashback opportunity</div>
+              <div class="metric-value" id="heroCashback">AED 800/mo</div>
+              <div class="metric-desc" id="heroCashbackDesc">Based on typical Meta and Google spend for similar corporates. Actual cashback depends on your ad spend and plan.</div>
+            </div>
+          </div>
+          <div class="trust-row">
+            <div class="trust"><b>Safe setup</b><span>Nothing is charged or changed until you create the card and add it to the merchant.</span></div>
+            <div class="trust"><b>Built for live campaigns</b><span>Keep the old card as backup so campaigns do not pause if a billing attempt fails.</span></div>
+            <div class="trust"><b>Finance-ready</b><span>Ad payments become visible in Alaan with card limits, transaction history, and cashback tracking.</span></div>
+          </div>
+        </section>
+
+        <section class="panel" id="ecosystemPanel">
+          <div class="section-title">
+            <div>
+              <h2>Spend checklist ecosystem</h2>
+              <p>The checklist is the container. Each universal merchant unlock plugs into the same journey: recommend, prepare, activate, confirm, optimize.</p>
+            </div>
+            <span class="badge purple">Usecase-led</span>
+          </div>
+          <div class="ecosystem" id="ecosystemSteps">
+            <div class="eco-step active" data-eco="1"><div class="eco-num">1</div><div><h4>Choose the merchant usecase</h4><p>Marketing is recommended because this account has no ad spend on Alaan and likely pays Meta or Google elsewhere.</p></div></div>
+            <div class="eco-step" data-eco="2"><div class="eco-num">2</div><div><h4>Prepare the right card setup</h4><p>Create a virtual, international card with a monthly limit high enough for ad billing.</p></div></div>
+            <div class="eco-step" data-eco="3"><div class="eco-num">3</div><div><h4>Add card to the merchant</h4><p>Follow the inline Meta or Google guide. Finance can also send the steps to marketing.</p></div></div>
+            <div class="eco-step" data-eco="4"><div class="eco-num">4</div><div><h4>Confirm first charge</h4><p>When Meta or Google charges the card, the checklist completes and cashback tracking starts.</p></div></div>
+          </div>
+        </section>
+
+        <section class="panel" id="missionsPanel">
+          <div class="section-title">
+            <div>
+              <h2>Merchant unlocks for this company</h2>
+              <p>Universal merchants are not tied to sector. They appear when the company is likely to have that recurring spend outside Alaan.</p>
+            </div>
+            <span class="badge green">Relevant now</span>
+          </div>
+          <div class="mission-grid">
+            <article class="mission recommended">
+              <span class="badge purple" style="position:absolute;right:14px;top:14px">Recommended</span>
+              <div class="icon">📣</div>
+              <div><h3>Marketing ads</h3><p>Move Meta and Google Ads billing to an Alaan virtual card and start earning cashback on spend you already make.</p></div>
+              <ul>
+                <li><span class="check">✓</span><span>Virtual international card</span></li>
+                <li><span class="check">✓</span><span>Meta + Google setup guide</span></li>
+                <li><span class="check">✓</span><span>Cashback and limit tracking</span></li>
+              </ul>
+              <button class="btn primary" id="startMarketingBtn">Prepare marketing spend setup</button>
+            </article>
+            <article class="mission disabled">
+              <div class="icon">💻</div>
+              <div><h3>Software subscriptions</h3><p>For SaaS tools like Zoho, HubSpot, Notion, Slack, and cloud tools. Coming next in the same ecosystem.</p></div>
+              <ul>
+                <li><span class="check">✓</span><span>Renewal reminders</span></li>
+                <li><span class="check">✓</span><span>Owner assignment</span></li>
+                <li><span class="check">✓</span><span>Duplicate subscription checks</span></li>
+              </ul>
+              <button class="btn ghost" disabled>Coming soon</button>
+            </article>
+            <article class="mission disabled">
+              <div class="icon">☎️</div>
+              <div><h3>Telecom and utilities</h3><p>For e&, du, DEWA, Salik and other recurring business payments. Uses the same merchant guide framework.</p></div>
+              <ul>
+                <li><span class="check">✓</span><span>Recurring payment setup</span></li>
+                <li><span class="check">✓</span><span>Vendor-specific instructions</span></li>
+                <li><span class="check">✓</span><span>First charge confirmation</span></li>
+              </ul>
+              <button class="btn ghost" disabled>Coming soon</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel hidden" id="reviewPanel">
+          <div class="section-title">
+            <div>
+              <h2>Review marketing spend setup</h2>
+              <p>This prepares a recommended card. It does not move money, charge the card, or change your Meta or Google account.</p>
+            </div>
+            <span class="badge blue">Review before creating</span>
+          </div>
+          <div class="card-row">
+            <div>
+              <div class="safe-box"><b>You stay in control.</b> Review and edit these fields before creating the card. After creation, you will still need to add the card inside Meta or Google.</div>
+              <div class="review-form">
+                <div class="field full"><label>Card name</label><input id="cardName" value="Meta & Google Ads Card" /></div>
+                <div class="field"><label>Card owner</label><select id="cardOwner"><option>Marketing team</option><option>Finance team</option><option>Founder / owner</option></select></div>
+                <div class="field"><label>Card type</label><input value="Virtual card" readonly /></div>
+                <div class="field"><label>Monthly limit</label><input id="cardLimit" value="AED 50,000" /></div>
+                <div class="field"><label>Usage</label><input value="International online payments" readonly /></div>
+                <div class="field full"><label>Merchant guidance</label><input value="Use for Meta Business Manager and Google Ads billing" readonly /></div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+                <button class="btn primary" id="createCardBtn">Create recommended card</button>
+                <button class="btn ghost" id="backToMissionsBtn">Back</button>
+              </div>
+            </div>
+            <div class="mock-card">
+              <div class="card-top"><div><div class="card-name">Alaan virtual</div><div style="font-size:13px;color:rgba(255,255,255,.62);margin-top:3px">Marketing spend</div></div><div class="card-chip"></div></div>
+              <div class="card-number">•••• •••• •••• 4921</div>
+              <div class="card-bottom"><div><div class="card-small">Limit</div><div class="card-big" id="mockLimit">AED 50,000/mo</div></div><div><div class="card-small">Scope</div><div class="card-big">International</div></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel hidden" id="guidePanel">
+          <div class="section-title">
+            <div>
+              <h2>Your marketing card is ready</h2>
+              <p>Copy the card details and add the card as the primary payment method in Meta or Google. Keep the old card as backup.</p>
+            </div>
+            <span class="badge green">Card created</span>
+          </div>
+          <div class="tabs">
+            <button class="tab active" data-platform="meta">Meta Ads</button>
+            <button class="tab" data-platform="google">Google Ads</button>
+          </div>
+          <div class="guide">
+            <div>
+              <div class="steps" id="guideSteps"></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+                <button class="btn primary" id="claimSwapBtn">Done - I added this card</button>
+                <button class="btn secondary" id="shareBtn">Send steps to marketing</button>
+                <button class="btn ghost" id="simulateTxnBtn">Simulate first charge</button>
+              </div>
+              <div class="notification" id="activationNotice"><div class="not-icon">✓</div><div><b>First ad charge confirmed.</b><br><span id="activationText">Meta charged AED 4,820. Cashback earned: AED 96.</span></div></div>
+            </div>
+            <aside class="copy-panel">
+              <h4>Card details</h4>
+              <p>Reveal only when you are ready to paste into the merchant portal.</p>
+              <div class="copy-item"><div class="copy-label">Card number</div><div class="copy-val"><span id="cardNumberText">4921 8830 1120 4409</span><button data-copy="4921883011204409">Copy</button></div></div>
+              <div class="copy-item"><div class="copy-label">Expiry</div><div class="copy-val"><span>08/29</span><button data-copy="08/29">Copy</button></div></div>
+              <div class="copy-item"><div class="copy-label">CVV</div><div class="copy-val"><span id="cvvText">•••</span><button id="revealCvvBtn">Reveal</button></div></div>
+              <div class="copy-item"><div class="copy-label">Billing name</div><div class="copy-val"><span id="billingName">Demo Corporate LLC</span><button data-copy="Demo Corporate LLC">Copy</button></div></div>
+              <button class="btn ghost full" id="increaseLimitBtn" style="margin-top:8px">Review limit before first charge</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel hidden" id="optimizationPanel">
+          <div class="section-title">
+            <div>
+              <h2>Marketing spend is active on Alaan</h2>
+              <p>The ecosystem does not end at card creation. It now tracks limits, cashback, first charge, and recurring spend health.</p>
+            </div>
+            <span class="badge green">Activated</span>
+          </div>
+          <div class="ecosystem">
+            <div class="eco-step done"><div class="eco-num">✓</div><div><h4>Cashback tracking</h4><p id="cashbackActiveText">Estimated AED 800/month once regular ad billing moves to Alaan.</p></div></div>
+            <div class="eco-step active"><div class="eco-num">!</div><div><h4>Limit health</h4><p>Your monthly card limit should be higher than your ad budget. We will alert you when usage reaches 80%.</p></div></div>
+            <div class="eco-step"><div class="eco-num">3</div><div><h4>Backup card safety</h4><p>Keep the old payment card in Meta or Google as backup for uninterrupted campaigns.</p></div></div>
+            <div class="eco-step"><div class="eco-num">4</div><div><h4>Next merchant unlock</h4><p>After marketing is active, the checklist can recommend software subscriptions or telecom payments.</p></div></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="checklist">
+        <section class="panel progress-card">
+          <div class="progress-head">
+            <div><h3>Spend checklist</h3><p id="checklistSubtitle">Marketing merchant unlock</p></div>
+            <div class="progress-ring" id="progressRing" style="--pct:20"><span id="progressPct">20%</span></div>
+          </div>
+          <div class="progress-line"><div class="progress-fill" id="progressFill" style="--progress:20%"></div></div>
+          <div class="check-items" id="checkItems">
+            <div class="check-item active" data-step="1"><div class="status-icon">1</div><div><div class="ci-title">Choose merchant usecase</div><div class="ci-desc">Start with marketing ads because this is a high-value recurring spend.</div></div></div>
+            <div class="check-item" data-step="2"><div class="status-icon">2</div><div><div class="ci-title">Create the right card</div><div class="ci-desc">Virtual, international, with a monthly limit.</div></div></div>
+            <div class="check-item" data-step="3"><div class="status-icon">3</div><div><div class="ci-title">Add card to Meta or Google</div><div class="ci-desc">Use the inline guide or send it to marketing.</div></div></div>
+            <div class="check-item" data-step="4"><div class="status-icon">4</div><div><div class="ci-title">Confirm first charge</div><div class="ci-desc">Alaan completes this when the first ad transaction appears.</div></div></div>
+            <div class="check-item" data-step="5"><div class="status-icon">5</div><div><div class="ci-title">Optimize and expand</div><div class="ci-desc">Track cashback, limit health, and the next merchant unlock.</div></div></div>
+          </div>
+        </section>
+
+        <section class="panel cashback-card">
+          <div class="metric-label">Cashback potential</div>
+          <div class="big" id="sideCashback">AED 800/mo</div>
+          <p id="sideCashbackDesc">Move recurring marketing spend to Alaan and keep the same campaigns running.</p>
+        </section>
+
+        <section class="panel panel-pad">
+          <div class="metric-label">Why this appears</div>
+          <p style="font-size:13px;color:var(--ink2);line-height:1.6" id="whyShown">This company has no ad spend on Alaan but looks likely to run Meta or Google ads based on its business profile and digital spend signals.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="shareModal">
+  <div class="modal">
+    <div class="modal-hd"><div><h3>Send setup steps to marketing</h3><p>Use this when finance can create the card but marketing owns Meta or Google billing access.</p></div><button class="close" id="closeShare">×</button></div>
+    <div class="modal-bd">
+      <div class="field"><label>Send to</label><input id="shareEmail" value="marketing@company.com" /></div>
+      <div class="share-box" id="shareText">Hi team, I created an Alaan virtual card for Meta and Google Ads. Please add it as the primary payment method and keep the old card as backup so campaigns continue running. The card details and steps are available in Alaan.</div>
+      <button class="btn primary full" id="sendShareBtn">Send guide</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+const accounts = {
+  realEstate:{name:'Real estate broker',cashback:'AED 800/mo',cashbackLong:'Typical ad spend: AED 25K-50K/month. Estimated cashback: AED 500-1,000/month.',title:'Move your Meta lead generation spend to Alaan.',lede:'Real estate teams often pay Meta and Google for lead generation every month. Move that recurring spend to an Alaan virtual card to earn cashback and give finance clean visibility.',why:'This company has no ad spend on Alaan and belongs to a business type that commonly relies on Meta and Google lead generation.',billing:'Desert Home Realty LLC',limit:'AED 50,000'},
+  restaurant:{name:'Restaurant group',cashback:'AED 400/mo',cashbackLong:'Typical ad spend: AED 10K-30K/month. Estimated cashback: AED 200-600/month.',title:'Move delivery and Instagram ad spend to Alaan.',lede:'Restaurants and catering brands often run recurring Meta and Google campaigns for orders, bookings, and delivery traffic. Put that spend on Alaan and track cashback automatically.',why:'This company has no ad spend on Alaan and fits a business type that commonly uses Instagram, Facebook, and Google campaigns.',billing:'Urban Bites Restaurant LLC',limit:'AED 30,000'},
+  ecom:{name:'Retail / e-commerce',cashback:'AED 700/mo',cashbackLong:'Typical ad spend: AED 20K-45K/month. Estimated cashback: AED 400-900/month.',title:'Move performance marketing spend to Alaan.',lede:'E-commerce teams run recurring Meta and Google campaigns. A dedicated Alaan card gives finance visibility while marketing keeps campaigns running.',why:'This company has no ad spend on Alaan and shows a digital business profile likely to include paid acquisition.',billing:'North Star Retail LLC',limit:'AED 50,000'},
+  services:{name:'Corporate services',cashback:'AED 500/mo',cashbackLong:'Typical ad spend: AED 15K-35K/month. Estimated cashback: AED 300-700/month.',title:'Move growth marketing payments to Alaan.',lede:'Service businesses often run campaigns for leads and inbound demand. Use a dedicated Alaan card to earn cashback and keep marketing spend visible.',why:'This company has no ad spend on Alaan but has signals that suggest recurring online marketing spend.',billing:'Prime Corporate Services LLC',limit:'AED 35,000'}
+};
+const metaSteps = [
+  ['Open Meta Business Manager billing','Go to Business Manager, then Billing and payments, then Payment methods.'],
+  ['Add a payment method','Choose credit or debit card and open the card entry form.'],
+  ['Paste your Alaan card details','Use the card number, expiry, CVV, and billing name shown here.'],
+  ['Set Alaan as primary','Keep the old card as backup so campaigns remain safe.'],
+  ['Confirm in Alaan','Click Done here. We will watch for the first Meta charge.']
+];
+const googleSteps = [
+  ['Open Google Ads billing','Go to Tools and settings, then Billing, then Payment methods.'],
+  ['Add a card','Choose credit or debit card and enter your Alaan virtual card details.'],
+  ['Set as primary payment method','Make the Alaan card the default for future Google Ads charges.'],
+  ['Watch for the first charge','Google may run a small verification charge before the next billing cycle.']
+];
+let state = {account:'realEstate',step:1,platform:'meta',claimed:false,activated:false};
+const el = id => document.getElementById(id);
+function toast(msg){const t=el('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
+function setStep(n){state.step=Math.max(state.step,n);renderProgress();renderEco();}
+function renderAccount(){const a=accounts[state.account];el('heroTitle').textContent=a.title;el('heroLede').textContent=a.lede;el('heroCashback').textContent=a.cashback;el('heroCashbackDesc').textContent=a.cashbackLong;el('sideCashback').textContent=a.cashback;el('sideCashbackDesc').textContent=a.cashbackLong;el('whyShown').textContent=a.why;el('billingName').textContent=a.billing;el('cardLimit').value=a.limit;el('mockLimit').textContent=a.limit + '/mo';el('cashbackActiveText').textContent='Expected ' + a.cashback + ' once regular ad billing moves to Alaan.'}
+function renderProgress(){const percent = [0,20,40,60,80,100][state.step];el('progressPct').textContent=percent+'%';el('progressRing').style.setProperty('--pct',percent);el('progressFill').style.setProperty('--progress',percent+'%');document.querySelectorAll('.check-item').forEach(item=>{const s=Number(item.dataset.step);item.classList.toggle('done',s<state.step);item.classList.toggle('active',s===state.step);const icon=item.querySelector('.status-icon');icon.textContent=s<state.step?'✓':s;});}
+function renderEco(){document.querySelectorAll('.eco-step[data-eco]').forEach(item=>{const s=Number(item.dataset.eco);item.classList.toggle('done',s<Math.min(state.step,5));item.classList.toggle('active',s===Math.min(state.step,4));const num=item.querySelector('.eco-num');num.textContent=s<Math.min(state.step,5)?'✓':s;});}
+function showReview(){el('reviewPanel').classList.remove('hidden');setStep(2);scrollToId('reviewPanel')}
+function createCard(){el('guidePanel').classList.remove('hidden');setStep(3);renderGuide();scrollToId('guidePanel');toast('Marketing card created. Add it to Meta or Google next.')}
+function renderGuide(){const data = state.platform==='meta'?metaSteps:googleSteps;el('guideSteps').innerHTML=data.map((s,i)=>`<div class="step ${i===2?'active':''}"><div class="step-num">${i+1}</div><div><h4>${s[0]}</h4><p>${s[1]}</p></div></div>`).join('');document.querySelectorAll('.tab').forEach(tab=>tab.classList.toggle('active',tab.dataset.platform===state.platform));}
+function claimSwap(){state.claimed=true;setStep(4);toast('Card swap marked as done. We will confirm after first merchant charge.');}
+function activate(){state.activated=true;el('activationNotice').classList.add('show');el('optimizationPanel').classList.remove('hidden');setStep(5);scrollToId('optimizationPanel');toast('First charge confirmed. Cashback tracking is now active.')}
+function reset(){state.step=1;state.claimed=false;state.activated=false;el('reviewPanel').classList.add('hidden');el('guidePanel').classList.add('hidden');el('optimizationPanel').classList.add('hidden');el('activationNotice').classList.remove('show');renderProgress();renderEco();scrollToId('heroPanel')}
+document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollToId(b.dataset.scroll)));
+el('startMarketingBtn').addEventListener('click',showReview);
+el('backToMissionsBtn').addEventListener('click',()=>scrollToId('missionsPanel'));
+el('createCardBtn').addEventListener('click',createCard);
+el('claimSwapBtn').addEventListener('click',claimSwap);
+el('simulateTxnBtn').addEventListener('click',activate);
+el('resetBtn').addEventListener('click',reset);
+el('shareBtn').addEventListener('click',()=>el('shareModal').classList.add('show'));
+el('closeShare').addEventListener('click',()=>el('shareModal').classList.remove('show'));
+el('sendShareBtn').addEventListener('click',()=>{el('shareModal').classList.remove('show');toast('Guide sent to marketing team.');setStep(4)});
+el('revealCvvBtn').addEventListener('click',()=>{el('cvvText').textContent='842';toast('CVV revealed for 8 seconds');setTimeout(()=>el('cvvText').textContent='•••',8000)});
+el('increaseLimitBtn').addEventListener('click',()=>toast('Limit review opened. In production this routes to card limit settings.'));
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{state.platform=tab.dataset.platform;renderGuide();toast((state.platform==='meta'?'Meta':'Google')+' guide selected.')}));
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);toast('Copied')}));
+el('accountSelect').addEventListener('change',e=>{state.account=e.target.value;renderAccount();reset();});
+el('cardLimit').addEventListener('input',e=>{el('mockLimit').textContent=e.target.value+'/mo'});
+renderAccount();renderProgress();renderEco();renderGuide();
+</script>
+</body>
+</html>
